@@ -52,8 +52,15 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   assets:
-    - web/assets/sent.png
-    - web/assets/piano.png
+    - assets/piano.png
+    - assets/steinwey.jpeg
+    - assets/kawai.jpeg
+    - assets/upright.jpeg
+    - assets/roland.jpeg
+    - assets/pollman.jpeg
+    - assets/piano_yamaha.jpg
+
+
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
