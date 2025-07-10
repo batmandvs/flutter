@@ -2,8 +2,13 @@ import 'package:flutter/material.dart';
 
 class NavBar extends StatelessWidget {
   final ScrollController scrollController;
+  final GlobalKey featuresKey; // ✅ Tambahkan key
 
-  const NavBar({super.key, required this.scrollController});
+  const NavBar({
+    super.key,
+    required this.scrollController,
+    required this.featuresKey,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,10 +38,10 @@ class NavBar extends StatelessWidget {
           ),
           const Spacer(),
           if (!isSmallScreen) ...[
-            NavItem(title: "Home", onTap: () => _scrollToSection(0)),
-            NavItem(title: "Products", onTap: () => _scrollToSection(600)),
-            NavItem(title: "Features", onTap: () => _scrollToSection(1200)),
-            NavItem(title: "Contact", onTap: () => _scrollToSection(1800)),
+            NavItem(title: "Home", onTap: () => _scrollTo(0)),
+            NavItem(title: "Products", onTap: () => _scrollTo(600)), // Optional: adjust
+            NavItem(title: "Features", onTap: _scrollToFeatures),
+            NavItem(title: "Contact", onTap: () => _scrollTo(3000)), // Optional: adjust
             const SizedBox(width: 20),
             GestureDetector(
               onTap: () => _navigate(context, '/login'),
@@ -50,22 +55,21 @@ class NavBar extends StatelessWidget {
               ),
             ),
           ] else
-            // Versi responsif: menu ikon
             PopupMenuButton<String>(
               icon: const Icon(Icons.menu),
               onSelected: (value) {
                 switch (value) {
                   case 'home':
-                    _scrollToSection(0);
+                    _scrollTo(0);
                     break;
                   case 'products':
-                    _scrollToSection(600);
+                    _scrollTo(600); // Optional
                     break;
                   case 'features':
-                    _scrollToSection(1200);
+                    _scrollToFeatures();
                     break;
                   case 'contact':
-                    _scrollToSection(1800);
+                    _scrollTo(3000); // Optional
                     break;
                   case 'login':
                     _navigate(context, '/login');
@@ -85,12 +89,23 @@ class NavBar extends StatelessWidget {
     );
   }
 
-  void _scrollToSection(double position) {
+  void _scrollTo(double offset) {
     scrollController.animateTo(
-      position,
+      offset,
       duration: const Duration(milliseconds: 500),
       curve: Curves.easeInOut,
     );
+  }
+
+  void _scrollToFeatures() {
+    final context = featuresKey.currentContext;
+    if (context != null) {
+      Scrollable.ensureVisible(
+        context,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    }
   }
 
   void _navigate(BuildContext context, String route) {
